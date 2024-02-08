@@ -1,0 +1,109 @@
+<div class="px-5 lg:px-14 py-5 lg:py-14 bg-white">
+  <h1 class="text-[40px] font-medium mt-4">Special Rates</h1>
+
+  <div
+    class="mt-10 pb-8 bottom-divider grid gap-4 lg:grid-cols-[30%_70%] items-center"
+  >
+    <div class="flex gap-4">
+      <ng-select
+        class="w-fit lg:w-[unset]"
+        [clearable]="false"
+        [(ngModel)]="selectedSize"
+        (ngModelChange)="getRates()"
+      >
+        <ng-option *ngFor="let size of sizes" [value]="size.id">{{
+          size.name
+        }}</ng-option>
+      </ng-select>
+      <ng-select
+        [clearable]="false"
+        [(ngModel)]="selectedType"
+        (ngModelChange)="getRates()"
+      >
+        <ng-option *ngFor="let type of types" [value]="type.id">{{
+          type.name
+        }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="flex gap-4 scrollable-container">
+      <div
+        *ngFor="let name of carrierName"
+        (click)="getCarrierName(name)"
+        [class.active]="activeName === name"
+        class="py-3 px-4 rounded cursor-pointer button-card flex items-center w-auto min-w-fit"
+      >
+        <p class="text-base">{{ name }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="">
+    <div class="pt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
+      <ng-container *ngFor="let item of dataToDisplay">
+        <div>
+          <div class="card border-opacity-10 flex flex-col gap-4">
+            <div>
+              <div class="flex justify-between">
+                <div class="flex flex-col gap-2">
+                  <p class="font-medium text-sm leading-5 text-black">
+                    {{ item.carrier_name }}
+                  </p>
+                  <p class="text-[#004800] text-xl">
+                    {{
+                      item.total_amount_usd | currency : "USD" : true : "2.0"
+                    }}
+                  </p>
+                </div>
+                <p class="text-sm leading-5 text-black-2">
+                  {{ item.origin_port_code }}
+                  <span class="text-lg font-bold text-[#E5E7EB]"> - </span>
+                  {{ item.destination_port_code }}
+                </p>
+              </div>
+            </div>
+            <div class="bottom-divider mt-2 lg:mt-3"></div>
+            <div class="grid grid-cols-3 mt-2 lg-mt-3">
+              <div>
+                <p class="grey-text font-light mb-2">Sailing Date</p>
+                <p class="text-black-2">
+                  {{ item.sailing_date ? item.sailing_date + " days" : "N/A" }}
+                </p>
+              </div>
+              <div>
+                <p class="grey-text font-light mb-2">Transit Time</p>
+                <p class="text-black-2">
+                  {{ item.transit_time ? item.transit_time + " days" : "N/A" }}
+                </p>
+              </div>
+              <div>
+                <p class="grey-text font-light mb-2">Free Days</p>
+                <p class="text-black-2">
+                  {{ item.demurrage_days + item.detention_days }} days
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Empty State  -->
+    <div *ngIf="data.length === 0" class="mt-4">
+      <p>No Rates To Display</p>
+    </div>
+
+    <div class="flex justify-center aitems-center mt-4">
+      <div *ngIf="data.length > 9" class="flex flex-col gap-3">
+        <p>
+          Viewing {{ dataToDisplay.length }} of {{ data.length }} special rates
+        </p>
+        <button
+          class="bg-none border border-[black] py-2 px-2 rounded-md"
+          (click)="showAll = !showAll"
+        >
+          {{ showAll ? "Show Less" : " Show More" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
